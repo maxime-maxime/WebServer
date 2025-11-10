@@ -4,7 +4,7 @@
   "TIMEOUT": 5,
   "MAX_WORKERS": 10,
   "WWW_DIRECTORY" : "www/testServeur",
-  "ENCRYPTION" : [0,"OFF",6]
+  "ENCRYPTION" : [0,"ON",6]
 },
 
   "DOCKER_CONFIG" : {

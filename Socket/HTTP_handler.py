@@ -2,7 +2,7 @@ import os
 from datetime import datetime
 import subprocess
 import Socket.utils as utils
-import zlib
+import gzip
 
 def tracer(func):
     def wrapper(*args, **kwargs):
@@ -218,6 +218,8 @@ class HTTPHandler:
                     cmd.extend(["-e", var])
                 cmd.append("php_5.6")  # nom du conteneur
                 cmd.extend(["php-cgi", "-f", docker_file_directory])
+                print("------------->   DOCKER CMD ")
+                print(cmd)
                 proc = subprocess.Popen(
                     cmd,
                     stdin=subprocess.PIPE,
@@ -227,9 +229,10 @@ class HTTPHandler:
                 stdout, stderr = proc.communicate(input=self.response['php_config'][1])
                 if stderr.decode() != "" : print("Erreur de l'interpreteur php : ", stderr.decode())
                 header_bytes, body_bytes = stdout.split(b"\r\n\r\n", 1)
-                self.response['header'] = header_bytes.decode()
-                self.response['body'] = body_bytes.decode()
+                self.response['php_header'] = header_bytes.decode()
+                self.response['body'] = body_bytes
                 self.response['Content-Type'] = "text/html"
+                print("toutvabien")
 
 
     # --- PHP environment ---
@@ -276,13 +279,12 @@ class HTTPHandler:
     # --- Generate response ---
     @tracer
     def compress_body(self,body_bytes: bytes, accept_encoding: str, encryption_config: list) -> tuple[bytes, bool]:
-
         min_size, compress_flag, mode = encryption_config
         if compress_flag.upper() != "ON":
             return body_bytes, False
 
         if "gzip" in accept_encoding and len(body_bytes) >= min_size:
-            compressed = zlib.compress(body_bytes, mode)
+            compressed = gzip.compress(body_bytes, compresslevel=mode)
             if len(compressed) < len(body_bytes):
                 return compressed, True
         return body_bytes, False
@@ -314,6 +316,7 @@ class HTTPHandler:
         # Statut et corps
         status = self.response.get("STATUS", 503)
         body_bytes = self.response.get("body", b"")
+        if not isinstance(body_bytes, bytes):body_bytes.decode()
 
         # Analyse headers PHP s'ils existent
         headers_dict = {}
@@ -322,6 +325,7 @@ class HTTPHandler:
                 if ":" in line:
                     key, value = line.split(":", 1)
                     headers_dict[key.strip()] = value.strip()
+            print("headers_dict",headers_dict)
 
         # Déterminer Content-Type à partir de PHP si présent
         content_type = headers_dict.get("Content-Type", self.response.get("Content-Type", "text/html"))
@@ -381,8 +385,9 @@ class HTTPHandler:
                         self.redirect_url()
                         break
                     response = self.generate_response()
-                    print("answer ---> ",response)
                     self.log_request()
+                    #print("answer ---> ",response)
+                    print("REQUEST SEND")
                     self.client_socket.sendall(response)
 
                     if self.parsed_request["Connection"].lower() == "close":
