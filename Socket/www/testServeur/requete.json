@@ -1,0 +1,13 @@
+[ {
+    "method": "GET",
+    "path": "/1312.html",
+    "headers": {
+      "Host": "localhost",
+      "User-Agent": "TerminalClient/1.0",
+      "Content-Length": "8",
+      "Accept": "application/json",
+      "Connection": "close",
+      "Referer": "http://localhost:8080/1312.html"
+    },
+    "body": ""
+  }]

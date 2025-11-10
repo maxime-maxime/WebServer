@@ -1,0 +1,10 @@
+{  "URL_ROUTING" : {
+"/feur": "https://www.google.com"
+},
+
+  "STATUS_ROUTING" : {
+    "RELATIVE_ERROR_DIRECTORY" : "error/",
+    "DEFAULT_ERROR_FILE" : "failed_to_load.html",
+    "CUSTOM_STATUS_FILES" : {}
+  }
+}

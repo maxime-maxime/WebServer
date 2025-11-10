@@ -1,0 +1,411 @@
+[
+  "",
+  {
+    "time": "2025-11-10 10:54:44.816974",
+    "addr": [
+      "127.0.0.1",
+      56078
+    ],
+    "parsed_request": {
+      "METHOD": "GET",
+      "PATH": "/favicon.ico",
+      "VERSION": "HTTP/1.1",
+      "Host": "localhost:8080",
+      "Connection": "keep-alive",
+      "sec-ch-ua-platform": "\"Windows\"",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0",
+      "sec-ch-ua": "\"Chromium\";v=\"142\", \"Microsoft Edge\";v=\"142\", \"Not_A Brand\";v=\"99\"",
+      "sec-ch-ua-mobile": "?0",
+      "Accept": [
+        "image/avif",
+        "image/webp",
+        "image/apng",
+        "image/svg+xml",
+        "image/*",
+        "*/*"
+      ],
+      "Sec-Fetch-Site": "same-origin",
+      "Sec-Fetch-Mode": "no-cors",
+      "Sec-Fetch-Dest": "image",
+      "Referer": "http://localhost:8080/",
+      "Accept-Encoding": [
+        "gzip",
+        "deflate",
+        "br",
+        "zstd"
+      ],
+      "Accept-Language": "fr,fr-FR;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6",
+      "Cookie": "username-localhost-8888=\"2|1:0|10:1761221696|23:username-localhost-8888|200:eyJ1c2VybmFtZSI6ICI3MmRiOWEzMWFkZTY0MzBmODc2YmE4MTMxYjdmNDAyNSIsICJuYW1lIjogIkFub255bW91cyBHYW55bWVkZSIsICJkaXNwbGF5X25hbWUiOiAiQW5vbnltb3VzIEdhbnltZWRlIiwgImluaXRpYWxzIjogIkFHIiwgImNvbG9yIjogbnVsbH0=|ec31326c997b04c3b6c75b17b1f939c81db7de6bbeeb07b46fbde63a4e595327\"; _xsrf=2|5f7fefcf|ec14ae14cea01b363995c65e55215bba|1761221696; PHPSESSID=744d35e7a0527a16ddb1f173b7b70df8",
+      "Content-Length": 0,
+      "body": ""
+    }
+  },
+  {
+    "time": "2025-11-10 10:55:06.793667",
+    "addr": [
+      "127.0.0.1",
+      54518
+    ],
+    "parsed_request": {
+      "METHOD": "GET",
+      "PATH": "/favicon.ico",
+      "VERSION": "HTTP/1.1",
+      "Host": "localhost:8080",
+      "Connection": "keep-alive",
+      "sec-ch-ua-platform": "\"Windows\"",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0",
+      "sec-ch-ua": "\"Chromium\";v=\"142\", \"Microsoft Edge\";v=\"142\", \"Not_A Brand\";v=\"99\"",
+      "sec-ch-ua-mobile": "?0",
+      "Accept": [
+        "image/avif",
+        "image/webp",
+        "image/apng",
+        "image/svg+xml",
+        "image/*",
+        "*/*"
+      ],
+      "Sec-Fetch-Site": "same-origin",
+      "Sec-Fetch-Mode": "no-cors",
+      "Sec-Fetch-Dest": "image",
+      "Referer": "http://localhost:8080/",
+      "Accept-Encoding": [
+        "gzip",
+        "deflate",
+        "br",
+        "zstd"
+      ],
+      "Accept-Language": "fr,fr-FR;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6",
+      "Cookie": "username-localhost-8888=\"2|1:0|10:1761221696|23:username-localhost-8888|200:eyJ1c2VybmFtZSI6ICI3MmRiOWEzMWFkZTY0MzBmODc2YmE4MTMxYjdmNDAyNSIsICJuYW1lIjogIkFub255bW91cyBHYW55bWVkZSIsICJkaXNwbGF5X25hbWUiOiAiQW5vbnltb3VzIEdhbnltZWRlIiwgImluaXRpYWxzIjogIkFHIiwgImNvbG9yIjogbnVsbH0=|ec31326c997b04c3b6c75b17b1f939c81db7de6bbeeb07b46fbde63a4e595327\"; _xsrf=2|5f7fefcf|ec14ae14cea01b363995c65e55215bba|1761221696; PHPSESSID=744d35e7a0527a16ddb1f173b7b70df8",
+      "Content-Length": 0,
+      "body": ""
+    }
+  },
+  {
+    "time": "2025-11-10 10:56:19.741066",
+    "addr": [
+      "127.0.0.1",
+      61756
+    ],
+    "parsed_request": {
+      "METHOD": "GET",
+      "PATH": "/favicon.ico",
+      "VERSION": "HTTP/1.1",
+      "Host": "localhost:8080",
+      "Connection": "keep-alive",
+      "sec-ch-ua-platform": "\"Windows\"",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0",
+      "sec-ch-ua": "\"Chromium\";v=\"142\", \"Microsoft Edge\";v=\"142\", \"Not_A Brand\";v=\"99\"",
+      "sec-ch-ua-mobile": "?0",
+      "Accept": [
+        "image/avif",
+        "image/webp",
+        "image/apng",
+        "image/svg+xml",
+        "image/*",
+        "*/*"
+      ],
+      "Sec-Fetch-Site": "same-origin",
+      "Sec-Fetch-Mode": "no-cors",
+      "Sec-Fetch-Dest": "image",
+      "Referer": "http://localhost:8080/",
+      "Accept-Encoding": [
+        "gzip",
+        "deflate",
+        "br",
+        "zstd"
+      ],
+      "Accept-Language": "fr,fr-FR;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6",
+      "Cookie": "username-localhost-8888=\"2|1:0|10:1761221696|23:username-localhost-8888|200:eyJ1c2VybmFtZSI6ICI3MmRiOWEzMWFkZTY0MzBmODc2YmE4MTMxYjdmNDAyNSIsICJuYW1lIjogIkFub255bW91cyBHYW55bWVkZSIsICJkaXNwbGF5X25hbWUiOiAiQW5vbnltb3VzIEdhbnltZWRlIiwgImluaXRpYWxzIjogIkFHIiwgImNvbG9yIjogbnVsbH0=|ec31326c997b04c3b6c75b17b1f939c81db7de6bbeeb07b46fbde63a4e595327\"; _xsrf=2|5f7fefcf|ec14ae14cea01b363995c65e55215bba|1761221696; PHPSESSID=744d35e7a0527a16ddb1f173b7b70df8",
+      "Content-Length": 0,
+      "body": ""
+    }
+  },
+  {
+    "time": "2025-11-10 10:57:33.385735",
+    "addr": [
+      "127.0.0.1",
+      59662
+    ],
+    "parsed_request": {
+      "METHOD": "GET",
+      "PATH": "/favicon.ico",
+      "VERSION": "HTTP/1.1",
+      "Host": "localhost:8080",
+      "Connection": "keep-alive",
+      "sec-ch-ua-platform": "\"Windows\"",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0",
+      "sec-ch-ua": "\"Chromium\";v=\"142\", \"Microsoft Edge\";v=\"142\", \"Not_A Brand\";v=\"99\"",
+      "sec-ch-ua-mobile": "?0",
+      "Accept": [
+        "image/avif",
+        "image/webp",
+        "image/apng",
+        "image/svg+xml",
+        "image/*",
+        "*/*"
+      ],
+      "Sec-Fetch-Site": "same-origin",
+      "Sec-Fetch-Mode": "no-cors",
+      "Sec-Fetch-Dest": "image",
+      "Referer": "http://localhost:8080/",
+      "Accept-Encoding": [
+        "gzip",
+        "deflate",
+        "br",
+        "zstd"
+      ],
+      "Accept-Language": "fr,fr-FR;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6",
+      "Cookie": "username-localhost-8888=\"2|1:0|10:1761221696|23:username-localhost-8888|200:eyJ1c2VybmFtZSI6ICI3MmRiOWEzMWFkZTY0MzBmODc2YmE4MTMxYjdmNDAyNSIsICJuYW1lIjogIkFub255bW91cyBHYW55bWVkZSIsICJkaXNwbGF5X25hbWUiOiAiQW5vbnltb3VzIEdhbnltZWRlIiwgImluaXRpYWxzIjogIkFHIiwgImNvbG9yIjogbnVsbH0=|ec31326c997b04c3b6c75b17b1f939c81db7de6bbeeb07b46fbde63a4e595327\"; _xsrf=2|5f7fefcf|ec14ae14cea01b363995c65e55215bba|1761221696; PHPSESSID=744d35e7a0527a16ddb1f173b7b70df8",
+      "Content-Length": 0,
+      "body": ""
+    }
+  },
+  {
+    "time": "2025-11-10 11:00:02.392495",
+    "addr": [
+      "127.0.0.1",
+      60196
+    ],
+    "parsed_request": {
+      "METHOD": "GET",
+      "PATH": "/favicon.ico",
+      "VERSION": "HTTP/1.1",
+      "Host": "localhost:8080",
+      "Connection": "keep-alive",
+      "sec-ch-ua-platform": "\"Windows\"",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0",
+      "sec-ch-ua": "\"Chromium\";v=\"142\", \"Microsoft Edge\";v=\"142\", \"Not_A Brand\";v=\"99\"",
+      "sec-ch-ua-mobile": "?0",
+      "Accept": [
+        "image/avif",
+        "image/webp",
+        "image/apng",
+        "image/svg+xml",
+        "image/*",
+        "*/*"
+      ],
+      "Sec-Fetch-Site": "same-origin",
+      "Sec-Fetch-Mode": "no-cors",
+      "Sec-Fetch-Dest": "image",
+      "Referer": "http://localhost:8080/",
+      "Accept-Encoding": [
+        "gzip",
+        "deflate",
+        "br",
+        "zstd"
+      ],
+      "Accept-Language": "fr,fr-FR;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6",
+      "Cookie": "username-localhost-8888=\"2|1:0|10:1761221696|23:username-localhost-8888|200:eyJ1c2VybmFtZSI6ICI3MmRiOWEzMWFkZTY0MzBmODc2YmE4MTMxYjdmNDAyNSIsICJuYW1lIjogIkFub255bW91cyBHYW55bWVkZSIsICJkaXNwbGF5X25hbWUiOiAiQW5vbnltb3VzIEdhbnltZWRlIiwgImluaXRpYWxzIjogIkFHIiwgImNvbG9yIjogbnVsbH0=|ec31326c997b04c3b6c75b17b1f939c81db7de6bbeeb07b46fbde63a4e595327\"; _xsrf=2|5f7fefcf|ec14ae14cea01b363995c65e55215bba|1761221696; PHPSESSID=744d35e7a0527a16ddb1f173b7b70df8",
+      "Content-Length": 0,
+      "body": ""
+    }
+  },
+  {
+    "time": "2025-11-10 11:00:28.097525",
+    "addr": [
+      "127.0.0.1",
+      62351
+    ],
+    "parsed_request": {
+      "METHOD": "GET",
+      "PATH": "/favicon.ico",
+      "VERSION": "HTTP/1.1",
+      "Host": "localhost:8080",
+      "Connection": "keep-alive",
+      "sec-ch-ua-platform": "\"Windows\"",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0",
+      "sec-ch-ua": "\"Chromium\";v=\"142\", \"Microsoft Edge\";v=\"142\", \"Not_A Brand\";v=\"99\"",
+      "sec-ch-ua-mobile": "?0",
+      "Accept": [
+        "image/avif",
+        "image/webp",
+        "image/apng",
+        "image/svg+xml",
+        "image/*",
+        "*/*"
+      ],
+      "Sec-Fetch-Site": "same-origin",
+      "Sec-Fetch-Mode": "no-cors",
+      "Sec-Fetch-Dest": "image",
+      "Referer": "http://localhost:8080/",
+      "Accept-Encoding": [
+        "gzip",
+        "deflate",
+        "br",
+        "zstd"
+      ],
+      "Accept-Language": "fr,fr-FR;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6",
+      "Cookie": "username-localhost-8888=\"2|1:0|10:1761221696|23:username-localhost-8888|200:eyJ1c2VybmFtZSI6ICI3MmRiOWEzMWFkZTY0MzBmODc2YmE4MTMxYjdmNDAyNSIsICJuYW1lIjogIkFub255bW91cyBHYW55bWVkZSIsICJkaXNwbGF5X25hbWUiOiAiQW5vbnltb3VzIEdhbnltZWRlIiwgImluaXRpYWxzIjogIkFHIiwgImNvbG9yIjogbnVsbH0=|ec31326c997b04c3b6c75b17b1f939c81db7de6bbeeb07b46fbde63a4e595327\"; _xsrf=2|5f7fefcf|ec14ae14cea01b363995c65e55215bba|1761221696; PHPSESSID=744d35e7a0527a16ddb1f173b7b70df8",
+      "Content-Length": 0,
+      "body": ""
+    }
+  },
+  {
+    "time": "2025-11-10 11:01:18.471140",
+    "addr": [
+      "127.0.0.1",
+      59531
+    ],
+    "parsed_request": {
+      "METHOD": "GET",
+      "PATH": "/index.html",
+      "VERSION": "HTTP/1.1",
+      "Host": "localhost:8080",
+      "Connection": "keep-alive",
+      "Cache-Control": "max-age=0",
+      "sec-ch-ua": "\"Chromium\";v=\"142\", \"Microsoft Edge\";v=\"142\", \"Not_A Brand\";v=\"99\"",
+      "sec-ch-ua-mobile": "?0",
+      "sec-ch-ua-platform": "\"Windows\"",
+      "Upgrade-Insecure-Requests": "1",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0",
+      "Accept": [
+        "text/html",
+        "application/xhtml+xml",
+        "application/xml",
+        "image/avif",
+        "image/webp",
+        "image/apng",
+        "*/*",
+        "application/signed-exchange"
+      ],
+      "Sec-Fetch-Site": "none",
+      "Sec-Fetch-Mode": "navigate",
+      "Sec-Fetch-User": "?1",
+      "Sec-Fetch-Dest": "document",
+      "Accept-Encoding": [
+        "gzip",
+        "deflate",
+        "br",
+        "zstd"
+      ],
+      "Accept-Language": "fr,fr-FR;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6",
+      "Cookie": "username-localhost-8888=\"2|1:0|10:1761221696|23:username-localhost-8888|200:eyJ1c2VybmFtZSI6ICI3MmRiOWEzMWFkZTY0MzBmODc2YmE4MTMxYjdmNDAyNSIsICJuYW1lIjogIkFub255bW91cyBHYW55bWVkZSIsICJkaXNwbGF5X25hbWUiOiAiQW5vbnltb3VzIEdhbnltZWRlIiwgImluaXRpYWxzIjogIkFHIiwgImNvbG9yIjogbnVsbH0=|ec31326c997b04c3b6c75b17b1f939c81db7de6bbeeb07b46fbde63a4e595327\"; _xsrf=2|5f7fefcf|ec14ae14cea01b363995c65e55215bba|1761221696; PHPSESSID=744d35e7a0527a16ddb1f173b7b70df8",
+      "Content-Length": 0,
+      "body": ""
+    }
+  },
+  {
+    "time": "2025-11-10 11:01:18.550545",
+    "addr": [
+      "127.0.0.1",
+      52404
+    ],
+    "parsed_request": {
+      "METHOD": "GET",
+      "PATH": "/favicon.ico",
+      "VERSION": "HTTP/1.1",
+      "Host": "localhost:8080",
+      "Connection": "keep-alive",
+      "sec-ch-ua-platform": "\"Windows\"",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0",
+      "sec-ch-ua": "\"Chromium\";v=\"142\", \"Microsoft Edge\";v=\"142\", \"Not_A Brand\";v=\"99\"",
+      "sec-ch-ua-mobile": "?0",
+      "Accept": [
+        "image/avif",
+        "image/webp",
+        "image/apng",
+        "image/svg+xml",
+        "image/*",
+        "*/*"
+      ],
+      "Sec-Fetch-Site": "same-origin",
+      "Sec-Fetch-Mode": "no-cors",
+      "Sec-Fetch-Dest": "image",
+      "Referer": "http://localhost:8080/",
+      "Accept-Encoding": [
+        "gzip",
+        "deflate",
+        "br",
+        "zstd"
+      ],
+      "Accept-Language": "fr,fr-FR;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6",
+      "Cookie": "username-localhost-8888=\"2|1:0|10:1761221696|23:username-localhost-8888|200:eyJ1c2VybmFtZSI6ICI3MmRiOWEzMWFkZTY0MzBmODc2YmE4MTMxYjdmNDAyNSIsICJuYW1lIjogIkFub255bW91cyBHYW55bWVkZSIsICJkaXNwbGF5X25hbWUiOiAiQW5vbnltb3VzIEdhbnltZWRlIiwgImluaXRpYWxzIjogIkFHIiwgImNvbG9yIjogbnVsbH0=|ec31326c997b04c3b6c75b17b1f939c81db7de6bbeeb07b46fbde63a4e595327\"; _xsrf=2|5f7fefcf|ec14ae14cea01b363995c65e55215bba|1761221696; PHPSESSID=744d35e7a0527a16ddb1f173b7b70df8",
+      "Content-Length": 0,
+      "body": ""
+    }
+  },
+  {
+    "time": "2025-11-10 11:01:32.993493",
+    "addr": [
+      "127.0.0.1",
+      57054
+    ],
+    "parsed_request": {
+      "METHOD": "GET",
+      "PATH": "/index.html",
+      "VERSION": "HTTP/1.1",
+      "Host": "localhost:8080",
+      "Connection": "keep-alive",
+      "Cache-Control": "max-age=0",
+      "sec-ch-ua": "\"Chromium\";v=\"142\", \"Microsoft Edge\";v=\"142\", \"Not_A Brand\";v=\"99\"",
+      "sec-ch-ua-mobile": "?0",
+      "sec-ch-ua-platform": "\"Windows\"",
+      "Upgrade-Insecure-Requests": "1",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0",
+      "Accept": [
+        "text/html",
+        "application/xhtml+xml",
+        "application/xml",
+        "image/avif",
+        "image/webp",
+        "image/apng",
+        "*/*",
+        "application/signed-exchange"
+      ],
+      "Sec-Fetch-Site": "none",
+      "Sec-Fetch-Mode": "navigate",
+      "Sec-Fetch-User": "?1",
+      "Sec-Fetch-Dest": "document",
+      "Accept-Encoding": [
+        "gzip",
+        "deflate",
+        "br",
+        "zstd"
+      ],
+      "Accept-Language": "fr,fr-FR;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6",
+      "Cookie": "username-localhost-8888=\"2|1:0|10:1761221696|23:username-localhost-8888|200:eyJ1c2VybmFtZSI6ICI3MmRiOWEzMWFkZTY0MzBmODc2YmE4MTMxYjdmNDAyNSIsICJuYW1lIjogIkFub255bW91cyBHYW55bWVkZSIsICJkaXNwbGF5X25hbWUiOiAiQW5vbnltb3VzIEdhbnltZWRlIiwgImluaXRpYWxzIjogIkFHIiwgImNvbG9yIjogbnVsbH0=|ec31326c997b04c3b6c75b17b1f939c81db7de6bbeeb07b46fbde63a4e595327\"; _xsrf=2|5f7fefcf|ec14ae14cea01b363995c65e55215bba|1761221696; PHPSESSID=744d35e7a0527a16ddb1f173b7b70df8",
+      "Content-Length": 0,
+      "body": ""
+    }
+  },
+  {
+    "time": "2025-11-10 11:01:33.068879",
+    "addr": [
+      "127.0.0.1",
+      55981
+    ],
+    "parsed_request": {
+      "METHOD": "GET",
+      "PATH": "/favicon.ico",
+      "VERSION": "HTTP/1.1",
+      "Host": "localhost:8080",
+      "Connection": "keep-alive",
+      "sec-ch-ua-platform": "\"Windows\"",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0",
+      "sec-ch-ua": "\"Chromium\";v=\"142\", \"Microsoft Edge\";v=\"142\", \"Not_A Brand\";v=\"99\"",
+      "sec-ch-ua-mobile": "?0",
+      "Accept": [
+        "image/avif",
+        "image/webp",
+        "image/apng",
+        "image/svg+xml",
+        "image/*",
+        "*/*"
+      ],
+      "Sec-Fetch-Site": "same-origin",
+      "Sec-Fetch-Mode": "no-cors",
+      "Sec-Fetch-Dest": "image",
+      "Referer": "http://localhost:8080/",
+      "Accept-Encoding": [
+        "gzip",
+        "deflate",
+        "br",
+        "zstd"
+      ],
+      "Accept-Language": "fr,fr-FR;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6",
+      "Cookie": "username-localhost-8888=\"2|1:0|10:1761221696|23:username-localhost-8888|200:eyJ1c2VybmFtZSI6ICI3MmRiOWEzMWFkZTY0MzBmODc2YmE4MTMxYjdmNDAyNSIsICJuYW1lIjogIkFub255bW91cyBHYW55bWVkZSIsICJkaXNwbGF5X25hbWUiOiAiQW5vbnltb3VzIEdhbnltZWRlIiwgImluaXRpYWxzIjogIkFHIiwgImNvbG9yIjogbnVsbH0=|ec31326c997b04c3b6c75b17b1f939c81db7de6bbeeb07b46fbde63a4e595327\"; _xsrf=2|5f7fefcf|ec14ae14cea01b363995c65e55215bba|1761221696; PHPSESSID=744d35e7a0527a16ddb1f173b7b70df8",
+      "Content-Length": 0,
+      "body": ""
+    }
+  }
+]

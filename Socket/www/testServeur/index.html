@@ -1,0 +1,126 @@
+<?php
+session_start();
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Variables PHP</title>
+</head>
+<body>
+    <h2>Mini formulaire</h2>
+    <form method="POST" action="">
+        <label for="message">Message :</label>
+        <input type="text" name="message" id="message" value="">
+        <label for="fucku">Autre champ :</label>
+        <input type="text" name="fucku" id="fucku" value="">
+        <input type="submit" value="Envoyer">
+    </form>
+
+    <h2>Variables $_GET</h2>
+    <?php if (!empty($_GET)): ?>
+        <table border="1" cellpadding="5">
+            <tr><th>Clé</th><th>Valeur</th></tr>
+            <?php foreach ($_GET as $key => $value): ?>
+                <tr>
+                    <td><?php echo htmlspecialchars($key); ?></td>
+                    <td><?php echo htmlspecialchars($value); ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+    <?php else: ?>
+        <p>Pas de données GET.</p>
+    <?php endif; ?>
+
+    <h2>Variables $_POST</h2>
+    <?php if (!empty($_POST)): ?>
+        <table border="1" cellpadding="5">
+            <tr><th>Clé</th><th>Valeur</th></tr>
+            <?php foreach ($_POST as $key => $value): ?>
+                <tr>
+                    <td><?php echo htmlspecialchars($key); ?></td>
+                    <td><?php echo htmlspecialchars($value); ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+    <?php else: ?>
+        <p>Pas de données POST.</p>
+    <?php endif; ?>
+
+    <h2>Variables $_COOKIE</h2>
+    <?php if (!empty($_COOKIE)): ?>
+        <table border="1" cellpadding="5">
+            <tr><th>Clé</th><th>Valeur</th></tr>
+            <?php foreach ($_COOKIE as $key => $value): ?>
+                <tr>
+                    <td><?php echo htmlspecialchars($key); ?></td>
+                    <td><?php echo htmlspecialchars($value); ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+    <?php else: ?>
+        <p>Pas de cookies définis.</p>
+    <?php endif; ?>
+
+    <h2>Variables $_SESSION</h2>
+    <?php if (!empty($_SESSION)): ?>
+        <table border="1" cellpadding="5">
+            <tr><th>Clé</th><th>Valeur</th></tr>
+            <?php foreach ($_SESSION as $key => $value): ?>
+                <tr>
+                    <td><?php echo htmlspecialchars($key); ?></td>
+                    <td><?php echo htmlspecialchars($value); ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+    <?php else: ?>
+        <p>Pas de session active.</p>
+    <?php endif; ?>
+
+    <h2>Variables $_SERVER</h2>
+    <?php if (!empty($_SERVER)): ?>
+        <table border="1" cellpadding="5">
+            <tr><th>Variable</th><th>Valeur</th></tr>
+            <?php foreach ($_SERVER as $key => $value): ?>
+                <tr>
+                    <td><?php echo htmlspecialchars($key); ?></td>
+                    <td><?php echo htmlspecialchars($value); ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+    <?php else: ?>
+        <p>Pas de variables $_SERVER définies.</p>
+    <?php endif; ?>
+
+    <h2>Variables $_FILES</h2>
+    <?php if (!empty($_FILES)): ?>
+        <table border="1" cellpadding="5">
+            <tr><th>Clé</th><th>Valeur</th></tr>
+            <?php foreach ($_FILES as $key => $value): ?>
+                <tr>
+                    <td><?php echo htmlspecialchars($key); ?></td>
+                    <td><?php echo htmlspecialchars(print_r($value, true)); ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+    <?php else: ?>
+        <p>Pas de fichiers uploadés.</p>
+    <?php endif; ?>
+
+    <h2>Variables $_ENV</h2>
+    <?php if (!empty($_ENV)): ?>
+        <table border="1" cellpadding="5">
+            <tr><th>Clé</th><th>Valeur</th></tr>
+            <?php foreach ($_ENV as $key => $value): ?>
+                <tr>
+                    <td><?php echo htmlspecialchars($key); ?></td>
+                    <td><?php echo htmlspecialchars($value); ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+    <?php else: ?>
+        <p>Pas de variables d’environnement définies.</p>
+    <?php endif; ?>
+
+</body>
+</html>

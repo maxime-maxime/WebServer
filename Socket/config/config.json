@@ -1,0 +1,25 @@
+{"SERVER_CONFIG" : {
+  "HOST": "127.0.0.1",
+  "PORT": 8080,
+  "TIMEOUT": 5,
+  "MAX_WORKERS": 10,
+  "WWW_DIRECTORY" : "www/testServeur",
+  "ENCRYPTION" : [0,"OFF",6]
+},
+
+  "DOCKER_CONFIG" : {
+  "CONTAINER_NAME": "php_5.6",
+  "IMAGE_NAME": "php_5.6",
+  "DOCKER_DIRECTORY": "/app",
+    "EXEC_PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+    "TMPDIR": "/tmp"
+},
+
+  "SECURITY_CONFIG" : {
+  "LOG_LEVEL": "INFO",
+  "LOG_DIRECTORY ": "logs",
+  "MAX_CONNECTIONS": 100,
+  "ALLOWED_METHODS": ["GET", "POST","PUT","DELETE","HEAD"],
+   "DEFAULT_STATUS" : "200"
+}
+}
