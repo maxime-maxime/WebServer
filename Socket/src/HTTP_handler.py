@@ -1,8 +1,8 @@
 import os
 from datetime import datetime
 import subprocess
-import Socket.utils as utils
-from Socket.utils import tracer as tracer
+import Socket.src.utils as utils
+from Socket.src.utils import tracer
 import gzip
 
 
@@ -31,20 +31,6 @@ http_status = {
 }
 
 # ---- Encrypted formats ----
-encrypted_format = (
-    ".zip",
-    ".gz",
-    ".bz2",
-    ".7z",
-    ".rar",
-    ".mp3",
-    ".mp4",
-    ".avi",
-    ".jpg",
-    ".jpeg",
-    ".png",
-    ".gif",
-)
 
 
 class HTTPHandler:
@@ -122,7 +108,7 @@ class HTTPHandler:
 
     # --- Logging ---
     def log_request(self):
-            status,logs = utils.load_file("logs/logs.json")
+            status,logs = utils.load_file("logs/logs.json", log=False)
             if status != 200 :
                 print(f"log status : {status} --> {http_status.get(status)}")
                 return
@@ -132,7 +118,7 @@ class HTTPHandler:
             if isinstance(blocks_to_log.get('body'), bytes):
                 blocks_to_log['body'] = blocks_to_log['body'].decode("utf-8", errors="replace")
             logs.append({"time": str(datetime.now()), "addr": self.addr, "parsed_request": blocks_to_log})
-            utils.save_file("logs/logs.json",logs)
+            utils.save_file("logs/logs.json", logs)
             if status != 200 : print(f"log status : {status} --> {http_status.get(status)}")
             else : print("request logged")
 
@@ -146,7 +132,12 @@ class HTTPHandler:
         path = os.path.join(self.config['SERVER_CONFIG']['WWW_DIRECTORY'], path)
         self.response["STATUS"], body = utils.load_file(path)
         if self.response["STATUS"] != 200: return
-        self.response["body"] = body.encode("utf-8", errors="replace")
+        if extension == '.js' :
+            body = body.replace("<script>", "")
+            body = body.replace("</script>", "")
+
+        self.response["body"] = body.encode("utf-8", errors="replace") if not isinstance(body, bytes) else body
+        if self.response["STATUS"] != 200: return
         if extension == '.php' or self.parsed_request["PATH"] == '/index.html' :
             self.analyse_dynamic(self.response["body"])
         if check_accept and "*/*" not in self.parsed_request.get("Accept", []) and content_type not in self.parsed_request.get("Accept", []):
@@ -155,6 +146,7 @@ class HTTPHandler:
     def load_status(self, error=True):
         err_config = self.routes["STATUS_ROUTING"]
         status = self.response["STATUS"]
+        print("LOADING_STATUS  --->  ",status)
 
         if status in err_config["CUSTOM_STATUS_FILES"]:
              print(err_config["CUSTOM_ERROR_FILES"][status])
@@ -195,13 +187,13 @@ class HTTPHandler:
     def handle_put(self):
         path = os.path.join(self.config['SERVER_CONFIG']['WWW_DIRECTORY'],self.parsed_request['PATH'])
         data =self.response["body"].decode("UTF-8")
-        self.response['STATUS'] = utils.save_file(path,data)
+        self.response['STATUS'] = utils.save_file(path, data)
         self.load_status()
 
 
     def handle_delete(self):
         path = os.path.join(self.config['SERVER_CONFIG']['WWW_DIRECTORY'],self.parsed_request['PATH'])
-        self.response["STATUS"]=utils.delete_file(path)
+        self.response["STATUS"]= utils.delete_file(path)
         self.load_status()
 
     # --- PHP/JS Dynamic Processing ---
@@ -281,12 +273,15 @@ class HTTPHandler:
     def compress_body(self,body_bytes: bytes, accept_encoding: str, encryption_config: list) -> tuple[bytes, bool]:
         min_size, compress_flag, mode = encryption_config
         if compress_flag.upper() != "ON":
+            print("Compression disabled")
             return body_bytes, False
 
-        if "gzip" in accept_encoding and len(body_bytes) >= min_size and self.response['Content-Type'] not in encrypted_format:
+        if "gzip" in accept_encoding and len(body_bytes) >= min_size and self.response['Content-Type'] not in utils.encrypted_format:
             compressed = gzip.compress(body_bytes, compresslevel=mode)
             if len(compressed) < len(body_bytes):
+                print("File compressed")
                 return compressed, True
+            print("Compression disabled")
         return body_bytes, False
 
     @tracer
@@ -383,6 +378,8 @@ class HTTPHandler:
                         self.redirect_url()
                         break
                     response = self.generate_response()
+                    #print("-------------------------------------------------------")
+                    #print(response)
                     self.log_request()
                     print("REQUEST SEND")
                     self.client_socket.sendall(response)
@@ -390,8 +387,9 @@ class HTTPHandler:
                     if self.parsed_request["Connection"].lower() == "close":
                         self.client_socket.close()
                         return
-        except Exception :
+        except Exception as e:
             try:
+                print(e.args)
                 body_bytes = "Oupsi... on a un problème :/".encode()
                 response = (
                         b"HTTP/1.1 500 Internal Server Error\r\n"

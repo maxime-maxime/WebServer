@@ -1,7 +1,7 @@
 import socket
 from concurrent.futures import ThreadPoolExecutor
-from Socket.HTTP_handler import HTTPHandler
-from Socket.utils import tracer
+from Socket.src.HTTP_handler import HTTPHandler
+from Socket.src.utils import tracer
 
 @tracer
 def start_server(config_data, routes_data, vm_lock):

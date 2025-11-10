@@ -1,5 +1,5 @@
-import Socket.utils as utils
-from Socket.utils import tracer
+import Socket.src.utils as utils
+from Socket.src.utils import tracer
 import os
 
 @tracer

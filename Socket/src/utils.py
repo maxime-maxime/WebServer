@@ -1,8 +1,19 @@
 import os
 import json
-
-import os
-import json
+encrypted_format = (
+    ".zip",
+    ".gz",
+    ".bz2",
+    ".7z",
+    ".rar",
+    ".mp3",
+    ".mp4",
+    ".avi",
+    ".jpg",
+    ".jpeg",
+    ".png",
+    ".gif",
+)
 
 
 
@@ -14,36 +25,43 @@ def tracer(func):
         return result
     return wrapper
 
-def load_file(path):
+def load_file(path, log=True):
     local_path = os.path.dirname(os.path.abspath(__file__))
     path = os.path.join(local_path, path)
     path = path.replace("/", "\\")
-    print(f"loading {path}")
-    extension = os.path.splitext(path)[1]
+    if log :print(f"loading {path}")
+    extension = os.path.splitext(path)[1].lower()
 
     if not os.path.exists(path):
         return 404, None
 
     try:
-        with open(path, 'r', encoding="utf-8") as f:
-            if extension == ".json":
-                try:
-                    return 200, json.load(f)
-                except json.JSONDecodeError:
-                    f.seek(0)
+        if extension in encrypted_format:
+            with open(path, 'rb') as f:
+                # mode binaire pour images
+                content = f.read()
+                return 200, content
+        else:
+            with open(path, 'r', encoding="utf-8") as f:
+                if extension == ".json":
+                    try:
+                        return 200, json.load(f)
+                    except json.JSONDecodeError:
+                        f.seek(0)
+                        return 200, f.read()
+                else:
                     return 200, f.read()
-            else:
-                return 200, f.read()
     except PermissionError:
         return 403, None
     except Exception:
         return 500, None
 
-def save_file(path, data):
+def save_file(path, data, log=True):
 
     local_path = os.path.dirname(os.path.abspath(__file__))
     path = os.path.join(local_path, path)
     path = path.replace("/", "\\")
+    if log :print(f"saving {path}")
 
     extension = os.path.splitext(path)[1]
 
@@ -70,10 +88,11 @@ def save_file(path, data):
 
     return 201 if not file_exists else 200
 
-def delete_file(path):
+def delete_file(path, log=True):
     local_path = os.path.dirname(os.path.abspath(__file__))
     path = os.path.join(local_path, path)
     path = path.replace("/", "\\")
+    if log :print(f"deleting {path}")
 
 
     try:
