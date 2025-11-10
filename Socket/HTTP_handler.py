@@ -2,13 +2,9 @@ import os
 from datetime import datetime
 import subprocess
 import Socket.utils as utils
+from Socket.utils import tracer as tracer
 import gzip
 
-def tracer(func):
-    def wrapper(*args, **kwargs):
-        print(f"@tracer :  {func.__name__}")
-        return func(*args, **kwargs)
-    return wrapper
 
 # ---- Types MIME ----
 ext = {
@@ -34,9 +30,22 @@ http_status = {
         302: "Found", 304: "Not Modified"
 }
 
-encrypted_format = {
+# ---- Encrypted formats ----
+encrypted_format = (
+    ".zip",
+    ".gz",
+    ".bz2",
+    ".7z",
+    ".rar",
+    ".mp3",
+    ".mp4",
+    ".avi",
+    ".jpg",
+    ".jpeg",
+    ".png",
+    ".gif",
+)
 
-}
 
 class HTTPHandler:
     def __init__(self, client_info,config_data, routes_data,vm_lock):
@@ -52,9 +61,8 @@ class HTTPHandler:
         self.response={}
 
     # --- Body reception ---
-    @tracer
+
     def recv_body(self):
-        print(self.parsed_request)
         content_length = self.parsed_request["Content-Length"]
         if "body" not in self.parsed_request : self.parsed_request["body"] = b""
         while len(self.parsed_request["body"]) < content_length:
@@ -126,9 +134,9 @@ class HTTPHandler:
             logs.append({"time": str(datetime.now()), "addr": self.addr, "parsed_request": blocks_to_log})
             utils.save_file("logs/logs.json",logs)
             if status != 200 : print(f"log status : {status} --> {http_status.get(status)}")
+            else : print("request logged")
 
     # --- Load file content ---
-    @tracer
     def load_content(self, path, check_accept=True):
         extension = os.path.splitext(path)[1]
         content_type = ext.get(extension, "application/octet-stream")
@@ -137,7 +145,6 @@ class HTTPHandler:
             path = path[1:]
         path = os.path.join(self.config['SERVER_CONFIG']['WWW_DIRECTORY'], path)
         self.response["STATUS"], body = utils.load_file(path)
-        print("------------------------------------------------------->   SATUS : ",self.response["STATUS"])
         if self.response["STATUS"] != 200: return
         self.response["body"] = body.encode("utf-8", errors="replace")
         if extension == '.php' or self.parsed_request["PATH"] == '/index.html' :
@@ -145,12 +152,12 @@ class HTTPHandler:
         if check_accept and "*/*" not in self.parsed_request.get("Accept", []) and content_type not in self.parsed_request.get("Accept", []):
             self.response["STATUS"] = 406
 
-    @tracer
     def load_status(self, error=True):
         err_config = self.routes["STATUS_ROUTING"]
         status = self.response["STATUS"]
 
         if status in err_config["CUSTOM_STATUS_FILES"]:
+             print(err_config["CUSTOM_ERROR_FILES"][status])
              self.load_content(
                  os.path.join(err_config["RELATIVE_ERROR_DIRECTORY"], err_config["CUSTOM_ERROR_FILES"][status])
              )
@@ -163,22 +170,20 @@ class HTTPHandler:
             self.response["Content-Type"] = "text/plain"
             self.response["body"] = f"STATUS ---> {status} : {http_status.get(status)}"
             return
+
         if self.response["STATUS"] in {404,403,500}:
             self.response["STATUS"] = status
             self.response["Content-Type"] = "text/plain"
-            self.response["body"] = f"CAN'T LOAD STATUS FILE ---> {status} : {http_status.get(status)}"
-
+            self.response["body"] = f"CAN'T LOAD STATUS PAGE ---> {status} : {http_status.get(status)}".encode("utf-8", errors="replace")
+            print("--------------------------->  ",self.response["body"],"   <---------------------------")
     # --- HTTP Handlers ---
 
-    @tracer
     def handle_get(self):
         filename = self.parsed_request["PATH"]
         self.load_content(filename)
-        print("heyy : ",self.response["STATUS"])
         if self.response["STATUS"] != 200:
             self.load_status()
 
-    @tracer
     def handle_post(self):
         self.response['STATUS'] = 200
         filename = self.parsed_request["PATH"]
@@ -187,7 +192,6 @@ class HTTPHandler:
         except FileNotFoundError:
             self.load_status()
 
-    @tracer
     def handle_put(self):
         path = os.path.join(self.config['SERVER_CONFIG']['WWW_DIRECTORY'],self.parsed_request['PATH'])
         data =self.response["body"].decode("UTF-8")
@@ -195,7 +199,6 @@ class HTTPHandler:
         self.load_status()
 
 
-    @tracer
     def handle_delete(self):
         path = os.path.join(self.config['SERVER_CONFIG']['WWW_DIRECTORY'],self.parsed_request['PATH'])
         self.response["STATUS"]=utils.delete_file(path)
@@ -211,15 +214,13 @@ class HTTPHandler:
                     self.parsed_request['PATH'][1:]
                 )
                 docker_file_directory = docker_file_directory.replace("\\", "/")
-                print("docker :", docker_file_directory)
+                print("RUNNING PHP FILE  ---> ", docker_file_directory)
                 self.set_php_config(docker_file_directory)
                 cmd = ["docker", "exec", "-i"]  # options avant le nom
                 for var in self.response['php_config'][0]:  # -e VAR=valeur
                     cmd.extend(["-e", var])
                 cmd.append("php_5.6")  # nom du conteneur
                 cmd.extend(["php-cgi", "-f", docker_file_directory])
-                print("------------->   DOCKER CMD ")
-                print(cmd)
                 proc = subprocess.Popen(
                     cmd,
                     stdin=subprocess.PIPE,
@@ -232,7 +233,6 @@ class HTTPHandler:
                 self.response['php_header'] = header_bytes.decode()
                 self.response['body'] = body_bytes
                 self.response['Content-Type'] = "text/html"
-                print("toutvabien")
 
 
     # --- PHP environment ---
@@ -283,12 +283,13 @@ class HTTPHandler:
         if compress_flag.upper() != "ON":
             return body_bytes, False
 
-        if "gzip" in accept_encoding and len(body_bytes) >= min_size:
+        if "gzip" in accept_encoding and len(body_bytes) >= min_size and self.response['Content-Type'] not in encrypted_format:
             compressed = gzip.compress(body_bytes, compresslevel=mode)
             if len(compressed) < len(body_bytes):
                 return compressed, True
         return body_bytes, False
 
+    @tracer
     def generate_response(self):
         include_body = True
         method = self.parsed_request.get("METHOD", "").upper()
@@ -316,7 +317,8 @@ class HTTPHandler:
         # Statut et corps
         status = self.response.get("STATUS", 503)
         body_bytes = self.response.get("body", b"")
-        if not isinstance(body_bytes, bytes):body_bytes.decode()
+        if not isinstance(body_bytes, bytes):body_bytes.decode(
+        )
 
         # Analyse headers PHP s'ils existent
         headers_dict = {}
@@ -325,7 +327,6 @@ class HTTPHandler:
                 if ":" in line:
                     key, value = line.split(":", 1)
                     headers_dict[key.strip()] = value.strip()
-            print("headers_dict",headers_dict)
 
         # Déterminer Content-Type à partir de PHP si présent
         content_type = headers_dict.get("Content-Type", self.response.get("Content-Type", "text/html"))
@@ -359,15 +360,12 @@ class HTTPHandler:
 
         if not include_body:
             return response_headers_str.encode()
-        print("header ----> ",response_headers_str.encode())
-        print("body ----> ",body_bytes)
-        print("here")
         if not isinstance(body_bytes, bytes):body_bytes = body_bytes.encode()
         return response_headers_str.encode() + body_bytes
 
     # --- Process request ---
-    def process(self):
-        print("processing request")
+    @tracer
+    def gather_requests(self):
         try:
             while True:
                 chunk = self.client_socket.recv(1024)
@@ -386,16 +384,14 @@ class HTTPHandler:
                         break
                     response = self.generate_response()
                     self.log_request()
-                    #print("answer ---> ",response)
                     print("REQUEST SEND")
                     self.client_socket.sendall(response)
 
                     if self.parsed_request["Connection"].lower() == "close":
                         self.client_socket.close()
                         return
-        except Exception as e:
+        except Exception :
             try:
-                print(e.args)
                 body_bytes = "Oupsi... on a un problème :/".encode()
                 response = (
                         b"HTTP/1.1 500 Internal Server Error\r\n"
@@ -408,6 +404,7 @@ class HTTPHandler:
             finally:
                 self.client_socket.close()
 
+    @tracer
     def redirect_url(self):
         response_headers = (
             "HTTP/1.1 302 Found\r\n"

@@ -4,6 +4,16 @@ import json
 import os
 import json
 
+
+
+def tracer(func):
+    def wrapper(*args, **kwargs):
+        print(f"@trying to {func.__name__}")
+        result = func(*args, **kwargs)
+        print(f"@{func.__name__} : succes")
+        return result
+    return wrapper
+
 def load_file(path):
     local_path = os.path.dirname(os.path.abspath(__file__))
     path = os.path.join(local_path, path)

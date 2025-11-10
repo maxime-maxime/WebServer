@@ -1,7 +1,8 @@
 import os
+from utils import load_file, tracer
 
-from utils import load_file
 
+@tracer
 def load_config():
 
     _,config_data = load_file("config/config.json")

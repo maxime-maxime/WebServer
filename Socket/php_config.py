@@ -1,8 +1,8 @@
 import Socket.utils as utils
-import subprocess
+from Socket.utils import tracer
 import os
 
-
+@tracer
 def update_php_config(container_name, local_path):
     # Chargement des fichiers
     status_php, base_conf = utils.load_file("config/php_cgi.ini")
@@ -33,6 +33,7 @@ def update_php_config(container_name, local_path):
     if status_save != 200:
         raise Exception("Failed to updated PHP configuration")
 
+
     _,updated_bat = utils.load_file("config/update_php.bat")
     if _ != 200 :
         raise Exception("Failed to updated PHP configuration")
@@ -42,12 +43,10 @@ def update_php_config(container_name, local_path):
         raise Exception("Failed to updated PHP configuration")
     bat_path = os.path.join(local_path, r"config\update_php.bat")
     bat_path = bat_path.replace("\\", "/")
-    print(bat_path)
-    bat_path = r"C:\Users\PC\Documents\Code\WebServer\Socket\config\update_php.bat"
     ret = os.system(f'start cmd.exe /c "{bat_path}"')
-    if ret == 0 :
+    if ret != 0 :
         raise Exception("Failed to updated PHP configuration")
-    print("Updated PHP configuration")
+    print("Successfully updated PHP configuration")
 
 if __name__ == "__main__":
     update_php_config("php_5.6", "/app")
