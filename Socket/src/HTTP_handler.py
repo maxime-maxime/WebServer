@@ -110,7 +110,7 @@ class HTTPHandler:
     def log_request(self):
             status,logs = utils.load_file("logs/logs.json", log=False)
             if status != 200 :
-                print(f"log status : {status} --> {http_status.get(status)}")
+                print(f"WARNING : CAN'T LOAD LOGS : STATUS : {status}  --> {http_status.get(status)}")
                 return
             if not isinstance(logs, list):
                 logs = [logs]
@@ -119,8 +119,7 @@ class HTTPHandler:
                 blocks_to_log['body'] = blocks_to_log['body'].decode("utf-8", errors="replace")
             logs.append({"time": str(datetime.now()), "addr": self.addr, "parsed_request": blocks_to_log})
             utils.save_file("logs/logs.json", logs)
-            if status != 200 : print(f"log status : {status} --> {http_status.get(status)}")
-            else : print("request logged")
+            if status != 200 : print(f"WARNING : CAN'T SAVE LOGS  --> STATUS : {status}  --> {http_status.get(status)}")
 
     # --- Load file content ---
     def load_content(self, path, check_accept=True):
@@ -146,7 +145,7 @@ class HTTPHandler:
     def load_status(self, error=True):
         err_config = self.routes["STATUS_ROUTING"]
         status = self.response["STATUS"]
-        print("LOADING_STATUS  --->  ",status)
+        print("redirecting to status page ---> STATUS : ",status)
 
         if status in err_config["CUSTOM_STATUS_FILES"]:
              print(err_config["CUSTOM_ERROR_FILES"][status])
@@ -160,14 +159,15 @@ class HTTPHandler:
 
         else:
             self.response["Content-Type"] = "text/plain"
-            self.response["body"] = f"STATUS ---> {status} : {http_status.get(status)}"
+            self.response["body"] = f"STATUS  ---> {status} : {http_status.get(status)}"
             return
 
         if self.response["STATUS"] in {404,403,500}:
             self.response["STATUS"] = status
             self.response["Content-Type"] = "text/plain"
-            self.response["body"] = f"CAN'T LOAD STATUS PAGE ---> {status} : {http_status.get(status)}".encode("utf-8", errors="replace")
+            self.response["body"] = f"WARNING : CAN'T LOAD DEFAULT ERROR PAGE  ---> STATUS : {self.response["STATUS"]} : {http_status.get(status)}".encode("utf-8", errors="replace")
             print("--------------------------->  ",self.response["body"],"   <---------------------------")
+
     # --- HTTP Handlers ---
 
     def handle_get(self):
@@ -206,7 +206,7 @@ class HTTPHandler:
                     self.parsed_request['PATH'][1:]
                 )
                 docker_file_directory = docker_file_directory.replace("\\", "/")
-                print("RUNNING PHP FILE  ---> ", docker_file_directory)
+                print("running php file  --> ", docker_file_directory)
                 self.set_php_config(docker_file_directory)
                 cmd = ["docker", "exec", "-i"]  # options avant le nom
                 for var in self.response['php_config'][0]:  # -e VAR=valeur
@@ -273,15 +273,15 @@ class HTTPHandler:
     def compress_body(self,body_bytes: bytes, accept_encoding: str, encryption_config: list) -> tuple[bytes, bool]:
         min_size, compress_flag, mode = encryption_config
         if compress_flag.upper() != "ON":
-            print("Compression disabled")
+            print("compression disabled")
             return body_bytes, False
 
         if "gzip" in accept_encoding and len(body_bytes) >= min_size and self.response['Content-Type'] not in utils.encrypted_format:
             compressed = gzip.compress(body_bytes, compresslevel=mode)
             if len(compressed) < len(body_bytes):
-                print("File compressed")
+                print("file compressed")
                 return compressed, True
-            print("Compression disabled")
+            print("compression disabled")
         return body_bytes, False
 
     @tracer
@@ -389,8 +389,8 @@ class HTTPHandler:
                         return
         except Exception as e:
             try:
-                print(e.args)
-                body_bytes = "Oupsi... on a un problème :/".encode()
+                print("INTERNAL SERVER ERROR : ", e.args)
+                body_bytes = "Oupsi... on a un souci :/".encode()
                 response = (
                         b"HTTP/1.1 500 Internal Server Error\r\n"
                         b"Content-Type: text/plain\r\n"

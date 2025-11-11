@@ -13,6 +13,7 @@ def start_server(config_data, routes_data, vm_lock):
     print(f"Serveur en écoute sur {server_vars["HOST"]}:{server_vars["PORT"]}")
 
     executor = ThreadPoolExecutor(max_workers=server_vars["MAX_WORKERS"])
+    print("HTTP SERVER LAUNCHED")
 
     while True:
         client_socket, addr = server.accept()
@@ -22,3 +23,4 @@ def start_server(config_data, routes_data, vm_lock):
         client_info={"client_socket" : client_socket, "client_address" : addr, "client_port" : client_port}
         handler = HTTPHandler(client_info,config_data, routes_data,vm_lock)
         executor.submit(handler.gather_requests)
+

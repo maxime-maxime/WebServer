@@ -18,4 +18,4 @@ def start_docker(docker_config, www_directory):
             docker_config["IMAGE_NAME"],
             "sleep", "infinity"
         ])
-        print("docker launched")
+        print("DOCKER LAUNCHED")

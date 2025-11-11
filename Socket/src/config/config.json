@@ -3,7 +3,7 @@
   "PORT": 8080,
   "TIMEOUT": 5,
   "MAX_WORKERS": 10,
-  "WWW_DIRECTORY" : "www/testServeur",
+  "WWW_DIRECTORY" : "www/content",
   "ENCRYPTION" : [512,"OFF",6]
 },
 

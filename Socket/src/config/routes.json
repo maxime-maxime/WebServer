@@ -3,7 +3,7 @@
 },
 
   "STATUS_ROUTING" : {
-    "RELATIVE_ERROR_DIRECTORY" : "error/",
+    "RELATIVE_ERROR_DIRECTORY" : "error_pages/",
     "DEFAULT_ERROR_FILE" : "failed_to_load.html",
     "CUSTOM_STATUS_FILES" :  {
       "404": "404.html",

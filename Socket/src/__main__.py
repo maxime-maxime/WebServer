@@ -1,27 +1,57 @@
 import threading
+from logging import exception
+
 from load_config import load_config
 from docker_manager import start_docker
 from run_server import start_server
 from php_config import update_php_config
+from sql_server import start_mysql, stop_mysql
 import os
 
 
 def main():
-    print(os.path.dirname(os.path.abspath(__file__)))
-    route_data, config_data = load_config()
-    vm_lock = threading.Lock()
-    start_docker(config_data["DOCKER_CONFIG"], config_data["SERVER_CONFIG"]["WWW_DIRECTORY"])
-
     try :
+        start_mysql()
+        print("SQL SERVER LAUNCHED")
+    except Exception as a :
+        print("CRITICAL ERROR - SQL LAUNCHING ERROR : ",a.args)
+        return
+
+    print(os.path.dirname(os.path.abspath(__file__)))
+    try :
+        route_data, config_data = load_config()
+    except Exception as k :
+        print("CRITICAL ERROR : ", k.args)
+        return
+
+    vm_lock = threading.Lock()
+    try:
+        start_docker(config_data["DOCKER_CONFIG"], config_data["SERVER_CONFIG"]["WWW_DIRECTORY"])
+
+
         container_name = config_data['DOCKER_CONFIG']['CONTAINER_NAME']
         local_path = config_data['DOCKER_CONFIG']['LOCAL_PATH']
         update_php_config(container_name,local_path)
+
+        try :
+            start_server(config_data,route_data, vm_lock)
+        except Exception as e :
+            print("CRITICAL ERROR : INTERNAL SERVER PROBLEM CAUSED IT TO CRASH :  ", e.args)
+            return
+
     except Exception as e :
-        print(e.args)
-
-    start_server(config_data,route_data, vm_lock)
-
+        print("CRITICAL ERROR : DOCKER CANNOT BE LAUNCHED : ",e.args)
+        return
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e :
+        print("PROGRAM CLOSED : ",e.args)
+    finally :
+        try:
+            start_mysql()
+            print("SQL Server successfully launched")
+        except Exception as e:
+            print("SQL CLOSING ERROR : ", e.args)

@@ -19,9 +19,8 @@ encrypted_format = (
 
 def tracer(func):
     def wrapper(*args, **kwargs):
-        print(f"@trying to {func.__name__}")
+        print(f"    trying to {func.__name__}")
         result = func(*args, **kwargs)
-        print(f"@{func.__name__} : succes")
         return result
     return wrapper
 
