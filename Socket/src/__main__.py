@@ -1,6 +1,4 @@
 import threading
-from logging import exception
-
 from load_config import load_config
 from docker_manager import start_docker
 from run_server import start_server
@@ -51,7 +49,7 @@ if __name__ == "__main__":
         print("PROGRAM CLOSED : ",e.args)
     finally :
         try:
-            start_mysql()
+            stop_mysql()
             print("SQL Server successfully launched")
         except Exception as e:
             print("SQL CLOSING ERROR : ", e.args)

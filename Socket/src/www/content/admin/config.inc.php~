@@ -14,11 +14,11 @@ $i = 0;
 $i++;
 
 /* Authentification */
-$cfg['Servers'][$i]['auth_type'] = 'http';
+$cfg['Servers'][$i]['auth_type'] = 'cookie';
 $cfg['Servers'][$i]['host'] = '172.17.0.1'; // MySQL sur l'hôte
 $cfg['Servers'][$i]['port'] = 3306;
 $cfg['Servers'][$i]['compress'] = false;
-//$cfg['Servers'][$i]['AllowNoPassword'] = false;
+$cfg['Servers'][$i]['AllowNoPassword'] = true;
 
 /* SSL désactivé car accès local non sécurisé */
 $cfg['Servers'][$i]['ssl'] = false;

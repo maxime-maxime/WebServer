@@ -36,6 +36,7 @@
     "session.use_trans_sid": 0,
     "session.cookie_httponly": 1,
     "session.cookie_samesite": "Lax",
+    "session.cookie_secure": 0,
     "opcache.enable": 1,
     "opcache.enable_cli": 0,
     "opcache.memory_consumption": 128,
@@ -43,6 +44,12 @@
     "opcache.max_accelerated_files": 10000,
     "opcache.validate_timestamps": 1,
     "opcache.revalidate_freq": 2,
-    "opcache.save_comments": 1
-}
-]
+    "opcache.save_comments": 1,
+    "mysqli.allow_local_infile": 1,
+    "mysqli.default_socket": "",
+    "mysqli.default_port": 3306,
+    "mysqli.default_host": "127.0.0.1",
+    "mysqli.default_user": "root",
+    "mysqli.default_pw": "",
+    "session.save_path": "/tmp/php_sessions"
+}]

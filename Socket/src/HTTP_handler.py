@@ -108,6 +108,7 @@ class HTTPHandler:
 
     # --- Logging ---
     def log_request(self):
+            return
             status,logs = utils.load_file("logs/logs.json", log=False)
             if status != 200 :
                 print(f"WARNING : CAN'T LOAD LOGS : STATUS : {status}  --> {http_status.get(status)}")
@@ -115,10 +116,15 @@ class HTTPHandler:
             if not isinstance(logs, list):
                 logs = [logs]
             blocks_to_log = self.parsed_request.copy()
-            if isinstance(blocks_to_log.get('body'), bytes):
-                blocks_to_log['body'] = blocks_to_log['body'].decode("utf-8", errors="replace")
+            if self.parsed_request.get("METHOD", "") == "GET":
+                blocks_to_log['body'] = ""
+            elif isinstance(blocks_to_log.get('body'), bytes):
+                    blocks_to_log['body'] = blocks_to_log['body'].decode("utf-8", errors="replace")
+
             logs.append({"time": str(datetime.now()), "addr": self.addr, "parsed_request": blocks_to_log})
-            utils.save_file("logs/logs.json", logs)
+
+            with self.vm_lock :
+                status = utils.save_file("logs/logs.json", logs)
             if status != 200 : print(f"WARNING : CAN'T SAVE LOGS  --> STATUS : {status}  --> {http_status.get(status)}")
 
     # --- Load file content ---
@@ -199,20 +205,20 @@ class HTTPHandler:
     # --- PHP/JS Dynamic Processing ---
     @tracer
     def analyse_dynamic(self, data):
+        if b"<?php" not in data:return
+        docker_file_directory = os.path.join(
+            self.config['DOCKER_CONFIG']['DOCKER_DIRECTORY'],
+            self.parsed_request['PATH'][1:]
+        )
+        docker_file_directory = docker_file_directory.replace("\\", "/")
+        print("running php file  --> ", docker_file_directory)
+        self.set_php_config(docker_file_directory)
+        cmd = ["docker", "exec", "-i"]  # options avant le nom
+        for var in self.response['php_config'][0]:  # -e VAR=valeur
+            cmd.extend(["-e", var])
+        cmd.append(self.config['DOCKER_CONFIG']['CONTAINER_NAME'])  # nom du conteneur
+        cmd.extend(["php-cgi", "-f", docker_file_directory])
         with self.vm_lock:
-                if b"<?php" not in data:return
-                docker_file_directory = os.path.join(
-                    self.config['DOCKER_CONFIG']['DOCKER_DIRECTORY'],
-                    self.parsed_request['PATH'][1:]
-                )
-                docker_file_directory = docker_file_directory.replace("\\", "/")
-                print("running php file  --> ", docker_file_directory)
-                self.set_php_config(docker_file_directory)
-                cmd = ["docker", "exec", "-i"]  # options avant le nom
-                for var in self.response['php_config'][0]:  # -e VAR=valeur
-                    cmd.extend(["-e", var])
-                cmd.append("php_5.6")  # nom du conteneur
-                cmd.extend(["php-cgi", "-f", docker_file_directory])
                 proc = subprocess.Popen(
                     cmd,
                     stdin=subprocess.PIPE,
@@ -220,11 +226,19 @@ class HTTPHandler:
                     stderr=subprocess.PIPE
                 )
                 stdout, stderr = proc.communicate(input=self.response['php_config'][1])
-                if stderr.decode() != "" : print("Erreur de l'interpreteur php : ", stderr.decode())
-                header_bytes, body_bytes = stdout.split(b"\r\n\r\n", 1)
-                self.response['php_header'] = header_bytes.decode()
-                self.response['body'] = body_bytes
-                self.response['Content-Type'] = "text/html"
+        print("php success")
+        print("stdout : ",stdout)
+        if stderr.decode() != "" : print("PHP INTERPRETOR ERROR : ", stderr.decode())
+        if stderr.decode() != "" : print("Erreur de l'interpreteur php : ", stderr.decode())
+        header_bytes, body_bytes = stdout.split(b"\r\n\r\n", 1)
+        if stdout.startswith(b"Status: 302 Found"):
+            _,request = data.split(b":",1)
+            protocol = self.config['SERVER_CONFIG']['HTTP_PROTOCOL'].encode()
+            response = protocol + request
+            raise Exception("STATUS 302, REQUEST REDICETED", response)
+        self.response['php_header'] = header_bytes.decode()
+        self.response['body'] = body_bytes
+        self.response['Content-Type'] = "text/html"
 
 
     # --- PHP environment ---
@@ -270,7 +284,10 @@ class HTTPHandler:
 
     # --- Generate response ---
     @tracer
-    def compress_body(self,body_bytes: bytes, accept_encoding: str, encryption_config: list) -> tuple[bytes, bool]:
+    def compress_body(self,body_bytes: bytes, accept_encoding: str, encryption_config: list, content_encoding: str) -> tuple[bytes, bool]:
+        if content_encoding == "gzip":
+            print('encrypted in zip')
+            return body_bytes, True
         min_size, compress_flag, mode = encryption_config
         if compress_flag.upper() != "ON":
             print("compression disabled")
@@ -283,6 +300,7 @@ class HTTPHandler:
                 return compressed, True
             print("compression disabled")
         return body_bytes, False
+
 
     @tracer
     def generate_response(self):
@@ -312,8 +330,7 @@ class HTTPHandler:
         # Statut et corps
         status = self.response.get("STATUS", 503)
         body_bytes = self.response.get("body", b"")
-        if not isinstance(body_bytes, bytes):body_bytes.decode(
-        )
+        if not isinstance(body_bytes, bytes):body_bytes.decode()
 
         # Analyse headers PHP s'ils existent
         headers_dict = {}
@@ -321,21 +338,26 @@ class HTTPHandler:
             for line in self.response['php_header'].splitlines():
                 if ":" in line:
                     key, value = line.split(":", 1)
+                    if key == "Status" :
+                        self.response["SPECIAL_STATUS"] = value
                     headers_dict[key.strip()] = value.strip()
 
         # Déterminer Content-Type à partir de PHP si présent
         content_type = headers_dict.get("Content-Type", self.response.get("Content-Type", "text/html"))
+        content_encoding = headers_dict.get("Content-Encoding", self.response.get("Content-Encoding", ""))
 
         # Compression
         body_bytes, encryption = self.compress_body(
             body_bytes,
             self.parsed_request.get("Accept-Encoding", ""),
-            self.config['SERVER_CONFIG'].get('ENCRYPTION', [0, "OFF"])
+            self.config['SERVER_CONFIG'].get('ENCRYPTION', [0, "OFF"]),
+            content_encoding
         )
 
         # Construction headers HTTP
-        status_text = http_status.get(status, "STATUS_ERROR")
-        response_headers = [f"HTTP/1.1 {status} {status_text}",
+        status_text = self.response.get("SPECIAL_STATUS", "") or str(status) + "  " + http_status.get(status, "STATUS_ERROR")
+
+        response_headers = [f"HTTP/1.1 {status_text}",
                             f"Connection: {self.parsed_request.get('Connection', 'close')}"]
 
         # Ajouter headers PHP sauf Content-Length et Content-Type
@@ -346,7 +368,7 @@ class HTTPHandler:
         # Content-Type et Content-Length corrects
         response_headers.append(f"Content-Type: {content_type}")
         response_headers.append(f"Content-Length: {len(body_bytes)}")
-        if encryption:
+        if encryption and headers_dict.get("Content-Encoding", "") == "" :
             response_headers.append("Content-Encoding: gzip")
 
         # Finaliser headers
@@ -388,27 +410,45 @@ class HTTPHandler:
                         self.client_socket.close()
                         return
         except Exception as e:
+            if e.args[0] == "STATUS 302, REQUEST REDICETED":
+                try :
+                    response = e.args[1]
+                    self.client_socket.sendall(response)
+                    return
+                except Exception as e :
+                    pass
+
             try:
                 print("INTERNAL SERVER ERROR : ", e.args)
                 body_bytes = "Oupsi... on a un souci :/".encode()
                 response = (
-                        b"HTTP/1.1 500 Internal Server Error\r\n"
-                        b"Content-Type: text/plain\r\n"
-                        b"Content-Length: " + str(len(body_bytes)).encode() + b"\r\n"
-                        b"Connection: close\r\n\r\n" +
-                        body_bytes
+                            b"HTTP/1.1 500 Internal Server Error\r\n"
+                            b"Content-Type: text/plain\r\n"
+                            b"Content-Length: " + str(len(body_bytes)).encode() + b"\r\n"
+                            b"Connection: close\r\n\r\n" +
+                            body_bytes
                 )
                 self.client_socket.sendall(response)
             finally:
                 self.client_socket.close()
 
     @tracer
-    def redirect_url(self):
-        response_headers = (
-            "HTTP/1.1 302 Found\r\n"
-            "Location: "+self.routes["URL_ROUTING"][self.parsed_request["PATH"]]+"\r\n"
-            "Content-Length: 0\r\n"
-            "Connection: close\r\n\r\n"
-        )
-        self.client_socket.sendall(response_headers.encode())
-        self.client_socket.close()
+    def redirect_url(self, header=None):
+        if not header:
+            response_headers = (
+                "HTTP/1.1 302 Found\r\n"
+                "Location: "+self.routes["URL_ROUTING"][self.parsed_request["PATH"]]+"\r\n"
+                "Content-Length: 0\r\n"
+                "Connection: close\r\n\r\n"
+            )
+            self.client_socket.sendall(response_headers.encode())
+            self.client_socket.close()
+        else:
+            headers_dict = {}
+            if "php_header" in self.response:
+                for line in self.response['php_header'].splitlines():
+                    if ":" in line:
+                        key, value = line.split(":", 1)
+                        headers_dict[key.strip()] = value.strip()
+
+

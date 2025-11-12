@@ -44,7 +44,7 @@ def update_php_config(container_name, local_path):
             raise Exception("WARNING : FAILED TO UPDATE PHP CONFIGURATIONS")
         bat_path = os.path.join(local_path, r"config\update_php.bat")
         bat_path = bat_path.replace("\\", "/")
-        ret = os.system(f'start cmd.exe /c "{bat_path}"')
+        ret = os.system(f'start cmd.exe /k "{bat_path}"')
         if ret != 0 :
             raise Exception("WARNING : FAILED TO UPDATE PHP CONFIGURATIONS")
         print("PHP CONFIG UPDATED")

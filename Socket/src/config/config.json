@@ -2,14 +2,15 @@
   "HOST": "127.0.0.1",
   "PORT": 8080,
   "TIMEOUT": 5,
-  "MAX_WORKERS": 10,
+  "MAX_WORKERS": 50,
   "WWW_DIRECTORY" : "www/content",
-  "ENCRYPTION" : [512,"OFF",6]
+  "ENCRYPTION" : [512,"OFF",6],
+  "HTTP_PROTOCOL": "HTTP/1.1"
 },
 
   "DOCKER_CONFIG" : {
-  "CONTAINER_NAME": "php_5.6",
-  "IMAGE_NAME": "php_5.6",
+  "CONTAINER_NAME": "php_8.4_mysqli",
+  "IMAGE_NAME": "php_mysqli",
   "DOCKER_DIRECTORY": "/app",
     "EXEC_PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
     "TMPDIR": "/tmp"
