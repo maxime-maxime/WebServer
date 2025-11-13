@@ -1,0 +1,61 @@
+<?php
+declare(strict_types=1);
+
+/* Secret pour le chiffrement des cookies (32 caractères minimum) */
+$cfg['blowfish_secret'] = 'A7b9C2dE4fGh6Ij8KlMn0OpQrStUvWxY';
+
+/* Débogage temporaire pour voir erreurs PHP */
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+/* Configuration des serveurs */
+$i = 0;
+$i++;
+
+/* Authentification */
+$cfg['Servers'][$i]['auth_type'] = 'http';
+$cfg['Servers'][$i]['host'] = 'host.docker.internal';
+$cfg['Servers'][$i]['port'] = 3306;
+$cfg['Servers'][$i]['compress'] = false;
+//$cfg['Servers'][$i]['AllowNoPassword'] = false;
+
+/* SSL désactivé car accès local non sécurisé */
+$cfg['Servers'][$i]['ssl'] = false;
+
+/* Directories pour upload/save */
+$cfg['UploadDir'] = '';
+$cfg['SaveDir'] = '';
+
+/* Interface */
+$cfg['DefaultLang'] = 'en';
+$cfg['ShowAll'] = true;
+$cfg['MaxRows'] = 50;
+$cfg['RowActionType'] = 'both';
+$cfg['ProtectBinary'] = 'blob';
+
+/* Historique des requêtes */
+$cfg['QueryHistoryDB'] = true;
+$cfg['QueryHistoryMax'] = 100;
+
+/* Rapport d'erreurs */
+$cfg['SendErrorReports'] = 'never';
+
+/* Pas de HTTPS forcé pour que les cookies fonctionnent sur HTTP */
+$cfg['ForceSSL'] = false;
+
+/* Emplacement des sessions (évite certains problèmes sous Docker) */
+$cfg['SessionSavePath'] = '/tmp/php_sessions';
+
+/* Configuration stockage phpMyAdmin (optionnel pour historique, bookmarks, etc.) */
+// $cfg['Servers'][$i]['controluser'] = 'pma';
+// $cfg['Servers'][$i]['controlpass'] = 'pmapass';
+// $cfg['Servers'][$i]['pmadb'] = 'phpmyadmin';
+// $cfg['Servers'][$i]['bookmarktable'] = 'pma__bookmark';
+// $cfg['Servers'][$i]['relation'] = 'pma__relation';
+// $cfg['Servers'][$i]['table_info'] = 'pma__table_info';
+// $cfg['Servers'][$i]['table_coords'] = 'pma__table_coords';
+// $cfg['Servers'][$i]['pdf_pages'] = 'pma__pdf_pages';
+// $cfg['Servers'][$i]['column_info'] = 'pma__column_info';
+// $cfg['Servers'][$i]['history'] = 'pma__history';
+// $cfg['Servers'][$i]['table_uiprefs'] = 'pma__table_uiprefs';

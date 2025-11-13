@@ -1,0 +1,2 @@
+docker cp "C:/Users/PC/Documents/Code/WebServer/Socket/src/config/src/php_cgi_mod.ini" def:/etc/php/8.4/cgi/php.ini
+docker cp "C:/Users/PC/Documents/Code/WebServer/Socket/src/config/src/php_fpm_mod.conf"  def:/etc/php/8.4/fpm/pool.d/www.conf

@@ -10,6 +10,7 @@ def start_docker(docker_config, www_directory):
         host_path = os.path.join(docker_config['LOCAL_PATH'], www_directory)
         container_path = docker_config['DOCKER_DIRECTORY']
         # Lancer le conteneur en arrière-plan
+        print("LAUNCHING CONTAINER IN PATH : ", host_path,":",container_path)
         subprocess.run([
             "docker", "run",
             "-v", f"{host_path}:{container_path}",

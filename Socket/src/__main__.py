@@ -23,6 +23,8 @@ def main():
         return
 
     vm_lock = threading.Lock()
+    log_lock = threading.Lock()
+
     try:
         start_docker(config_data["DOCKER_CONFIG"], config_data["SERVER_CONFIG"]["WWW_DIRECTORY"])
 
@@ -32,7 +34,7 @@ def main():
         update_php_config(container_name,local_path)
 
         try :
-            start_server(config_data,route_data, vm_lock)
+            start_server(config_data,route_data, vm_lock, log_lock)
         except Exception as e :
             print("CRITICAL ERROR : INTERNAL SERVER PROBLEM CAUSED IT TO CRASH :  ", e.args)
             return

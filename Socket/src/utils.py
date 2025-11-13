@@ -1,26 +1,28 @@
 import os
 import json
+import time
+
+
 encrypted_format = (
-    ".zip",
-    ".gz",
-    ".bz2",
-    ".7z",
-    ".rar",
-    ".mp3",
-    ".mp4",
-    ".avi",
-    ".jpg",
-    ".jpeg",
-    ".png",
-    ".gif",
+    ".zip", ".gz", ".bz2", ".7z", ".rar",
+    ".mp3", ".wav", ".flac", ".aac", ".ogg",
+    ".mp4", ".avi", ".mkv", ".mov", ".wmv", ".flv",
+    ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff", ".webp", ".ico",
+    ".pdf", ".docx", ".xlsx", ".pptx",
+    ".tar", ".tar.gz", ".tgz",
+    ".exe", ".dll", ".bin"
 )
+
 
 
 
 def tracer(func):
     def wrapper(*args, **kwargs):
         print(f"    trying to {func.__name__}")
+        start = time.perf_counter()
         result = func(*args, **kwargs)
+        end = time.perf_counter()
+        print(f"durée pour {func.__name__} : {end - start}")
         return result
     return wrapper
 

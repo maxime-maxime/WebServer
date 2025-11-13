@@ -8,8 +8,8 @@
     "max_input_time": 60,
     "memory_limit": "128M",
     "error_reporting": "E_ALL & ~E_DEPRECATED",
-    "display_errors": "Off",
-    "display_startup_errors": "Off",
+    "display_errors": "On",
+    "display_startup_errors": "On",
     "log_errors": "On",
     "variables_order": "EGPCS",
     "request_order": "GP",
@@ -37,8 +37,7 @@
     "session.cookie_httponly": 1,
     "session.cookie_samesite": "Lax",
     "session.cookie_secure": 0,
-    "opcache.enable": 1,
-    "opcache.enable_cli": 0,
+    "opcache.enable": 1,   "opcache.enable_cli": 0,
     "opcache.memory_consumption": 128,
     "opcache.interned_strings_buffer": 8,
     "opcache.max_accelerated_files": 10000,
@@ -48,8 +47,29 @@
     "mysqli.allow_local_infile": 1,
     "mysqli.default_socket": "",
     "mysqli.default_port": 3306,
-    "mysqli.default_host": "127.0.0.1",
+    "mysqli.default_host": "host.docker.internal",
     "mysqli.default_user": "root",
     "mysqli.default_pw": "",
     "session.save_path": "/tmp/php_sessions"
-}]
+},
+  {
+    "listen": "127.0.0.1:9000",
+    "listen.owner": "www-data",
+    "listen.group": "www-data",
+    "listen.mode": "0660",
+
+    "pm": "dynamic",
+    "pm.max_children": 10,
+    "pm.start_servers": 3,
+    "pm.min_spare_servers": 2,
+    "pm.max_spare_servers": 5,
+    "pm.max_requests": 500,
+    "pm.process_idle_timeout": "10s",
+
+    "env[PATH]": "/usr/local/bin:/usr/bin:/bin",
+    "clear_env": true,
+
+    "error_log": "/var/log/php-fpm/error.log",
+    "catch_workers_output": true
+
+  }]
