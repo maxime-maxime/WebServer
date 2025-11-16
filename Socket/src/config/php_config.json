@@ -69,7 +69,7 @@
     "env[PATH]": "/usr/local/bin:/usr/bin:/bin",
     "clear_env": true,
 
-    "error_log": "/var/log/php-fpm/error.log",
+    "error_log": "/var/log/php8.4-fpm.log",
     "catch_workers_output": true
 
   }]

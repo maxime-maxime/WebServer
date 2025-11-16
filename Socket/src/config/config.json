@@ -6,12 +6,13 @@
   "WWW_DIRECTORY" : "www/content",
   "ENCRYPTION" : [512,"ON",6],
   "HTTP_PROTOCOL": "HTTP/1.1",
-  "CACHE": ["ON","604800"]
+  "CACHE": ["ON","604800"],
+  "PHP_BUFFER_SIZE": 4096
 },
 
   "DOCKER_CONFIG" : {
-  "CONTAINER_NAME": "def",
-  "IMAGE_NAME": "php_pfm_sqli",
+  "CONTAINER_NAME": "defcore",
+  "IMAGE_NAME": "php_pfm_pma",
   "DOCKER_DIRECTORY": "/app",
     "EXEC_PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
     "TMPDIR": "/tmp"

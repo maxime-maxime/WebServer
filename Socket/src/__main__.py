@@ -17,7 +17,7 @@ def main():
 
     print(os.path.dirname(os.path.abspath(__file__)))
     try :
-        route_data, config_data = load_config()
+        route_data, config_data,php_config = load_config()
     except Exception as k :
         print("CRITICAL ERROR : ", k.args)
         return
@@ -26,15 +26,15 @@ def main():
     log_lock = threading.Lock()
 
     try:
-        start_docker(config_data["DOCKER_CONFIG"], config_data["SERVER_CONFIG"]["WWW_DIRECTORY"])
+        start_docker(config_data["DOCKER_CONFIG"], config_data["SERVER_CONFIG"]["WWW_DIRECTORY"], php_config)
 
 
         container_name = config_data['DOCKER_CONFIG']['CONTAINER_NAME']
         local_path = config_data['DOCKER_CONFIG']['LOCAL_PATH']
-        update_php_config(container_name,local_path)
+        update_php_config(container_name,local_path, php_config)
 
         try :
-            start_server(config_data,route_data, vm_lock, log_lock)
+            start_server(config_data,route_data, vm_lock, log_lock, php_config)
         except Exception as e :
             print("CRITICAL ERROR : INTERNAL SERVER PROBLEM CAUSED IT TO CRASH :  ", e.args)
             return

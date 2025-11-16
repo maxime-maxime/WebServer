@@ -1,12 +1,13 @@
 import os
 from datetime import datetime
-import subprocess
 import Socket.src.utils as utils
 from Socket.src.utils import tracer
 import gzip
 from email.utils import format_datetime
 import datetime
 import xxhash
+from php_processor import analyse_dynamic
+
 
 
 static_files = [
@@ -130,12 +131,13 @@ http_status = {
 
 
 class HTTPHandler:
-    def __init__(self, client_info,config_data, routes_data,vm_lock,log_lock):
+    def __init__(self, client_info,config_data, routes_data,vm_lock,log_lock, php_config):
         self.client_socket = client_info["client_socket"]
         self.addr = client_info["client_address"]
         self.client_port = client_info["client_port"]
         self.config = config_data
         self.routes = routes_data
+        self.php_config = php_config
         self.parsed_request = {}
         self.buffer = bytearray()
         self.vm_lock = vm_lock
@@ -272,7 +274,7 @@ class HTTPHandler:
         self.response["body"] = body.encode("utf-8", errors="replace") if not isinstance(body, bytes) else body
         if self.response["STATUS"] != 200: return
         if extension == '.php' :
-            self.analyse_dynamic(self.response["body"])
+            analyse_dynamic(self.response["body"],  self.addr, self.response, self.php_config, self.config, self.parsed_request, self.client_port)
         if self.response["STATUS"]== 304 :
             current_hash = self.define_cache(self.response["body"], check=True)
             if current_hash == self.parsed_request.get("If-None-Match", ""):
@@ -333,91 +335,6 @@ class HTTPHandler:
         self.response["STATUS"]= utils.delete_file(path)
         self.load_status()
 
-    # --- PHP/JS Dynamic Processing ---
-    @tracer
-    def analyse_dynamic(self, data):
-        print("Analyzing php : ", self.addr)
-        if b"<?php" not in data:
-            self.response['Content-Type'] = "text/html"
-            return
-        docker_file_directory = os.path.join(
-            self.config['DOCKER_CONFIG']['DOCKER_DIRECTORY'],
-            self.parsed_request['PATH'][1:]
-        )
-        docker_file_directory = docker_file_directory.replace("\\", "/")
-        print("running php file  --> ", docker_file_directory)
-        self.set_php_config(docker_file_directory)
-        cmd = ["docker", "exec", "-i"]  # options avant le nom
-        for var in self.response['php_config'][0]:  # -e VAR=valeur
-            cmd.extend(["-e", var])
-        cmd.append(self.config['DOCKER_CONFIG']['CONTAINER_NAME'])  # nom du conteneur
-        cmd.extend(["php-cgi", "-f", docker_file_directory])
-        print("cmd : ",cmd)
-        with self.vm_lock:
-                proc = subprocess.Popen(
-                    cmd,
-                    stdin=subprocess.PIPE,
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE
-                )
-                stdout, stderr = proc.communicate(input=self.response['php_config'][1])
-        print("php success")
-        #print("stdout : ",stdout)
-        if stderr.decode() != "" : print("PHP INTERPRETOR ERROR : ", stderr.decode())
-        if stderr.decode() != "" : print("Erreur de l'interpreteur php : ", stderr.decode())
-        header_bytes, body_bytes = stdout.split(b"\r\n\r\n", 1)
-        if stdout.startswith(b"Status: 302 Found"):
-            _,request = data.split(b":",1)
-            protocol = self.config['SERVER_CONFIG']['HTTP_PROTOCOL'].encode()
-            response = protocol + request
-            raise Exception("STATUS 302, REQUEST REDICETED", response)
-        self.response['php_header'] = header_bytes.decode()
-        self.response['body'] = body_bytes
-        self.response['Content-Type'] = "text/html"
-        print("Analyzing php end  : ", self.addr)
-
-
-    # --- PHP environment ---
-    def set_php_config(self, docker_file_directory):
-        php_config = [{
-    'SERVER_SOFTWARE': 'CustomPythonServer/1.0',
-    'SERVER_NAME': self.config['SERVER_CONFIG']['HOST'],
-    'SERVER_PORT': self.config['SERVER_CONFIG']['PORT'],
-    'SERVER_PROTOCOL': 'HTTP/1.1',
-    'GATEWAY_INTERFACE': 'CGI/1.1',
-
-    'REQUEST_METHOD': self.parsed_request['METHOD'],
-    'REQUEST_URI': self.parsed_request['PATH'],
-    'SCRIPT_FILENAME': docker_file_directory,
-    'SCRIPT_NAME': self.parsed_request.get('PATH', ''),
-    'PATH_INFO': self.parsed_request.get('PATH', ''),
-    'QUERY_STRING': self.parsed_request.get('QUERY', ''),
-    'CONTENT_TYPE': self.parsed_request.get('Content-Type', ''),
-    'CONTENT_LENGTH': str(len(self.parsed_request.get('body', ''))),
-    'HTTP_HOST': self.parsed_request.get('Host', ''),
-    'REDIRECT_STATUS': '200',
-
-    'REMOTE_ADDR': self.addr[0],
-    'REMOTE_PORT': self.client_port,
-
-    'HOME': self.config['DOCKER_CONFIG']['DOCKER_DIRECTORY'],
-    'PATH': self.config['DOCKER_CONFIG']['EXEC_PATH'],
-    'TMPDIR': self.config['DOCKER_CONFIG']['TMPDIR'],
-},""]
-
-        minimal_env = ["METHOD", "Host", "Content-Type", "Content-Length", "PATH", 'body', 'STATUS']
-        for header, value in self.parsed_request.items():
-            if header not in minimal_env:
-                key = "HTTP_" + header.upper().replace("-", "_")
-                if isinstance(value, list):
-                    php_config[0][key] = ", ".join(value)
-                else:
-                    php_config[0][key] = value
-
-        php_config[1] = self.parsed_request['body']
-        php_config[0] = [f"{key}={value}" for key, value in php_config[0].items()]
-        self.response['php_config'] = php_config
-        print("PHP CONFIG SET", self.response['php_config'])
 
     # --- Generate response ---
 

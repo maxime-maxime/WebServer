@@ -28,17 +28,15 @@ def apply_php_params(base_conf, php_params, save_path):
         raise Exception(f"FAILED TO UPDATE PHP CONFIGURATIONS '{save_path}' / STATUS : {status_save}")
 
 @tracer
-def update_php_config(container_name, local_path):
+def update_php_config(container_name, local_path, config_php):
     try:
         status_php, base_conf = utils.load_file("config/src/php_cgi.ini")
-        status_php, base_conf_fpm = utils.load_file("config/src/php_fpm.conf")
-        status_json, config_php = utils.load_file("config/php_config.json")
+        status_php_, base_conf_fpm = utils.load_file("config/src/php_fpm.conf")
 
-        if status_php != 200 or status_json != 200:
-            raise Exception("FAILED TO UPDATE PHP CONFIGURATIONS STATUS : ", status_php, status_json)
+        if status_php != 200 :
+            raise Exception("FAILED TO UPDATE PHP CONFIGURATIONS STATUS : ", status_php, " / ", status_php_)
 
         # Appliquer les paramètres CGI
-        print(type(config_php[0]))
         apply_php_params(base_conf, config_php[0], "config/src/php_cgi_mod.ini")
         # Appliquer les paramètres FPM
         apply_php_params(base_conf_fpm, config_php[1], "config/src/php_pfm_mod.conf")
