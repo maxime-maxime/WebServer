@@ -1,0 +1,111 @@
+h1{
+    text-align: center;
+    font-size: 300%;
+}
+
+        /* Style général du tableau */
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse; /* Fusionne les bordures pour éviter les doublons */
+            background-color: #f9f9f9; /* Fond gris clair */
+        }
+
+        /* Style des en-têtes de colonnes */
+        th {
+            background-color: #113596; /* Fond vert */
+            color: white; /* Texte en blanc */
+            padding: 12px 15px;
+            text-align: center; /* Alignement du texte à gauche */
+            font-size: 115% ;
+        }
+
+        /* Style des cellules de données */
+        td {
+            padding: 12px 15px;
+            text-align: center; /* Alignement du texte à gauche */
+            border-bottom: 1px solid #ddd; /* Bordure fine en bas de chaque ligne */
+        }
+
+        /* Style pour les lignes paires du tableau */
+        tr:nth-child(even) {
+            background-color: #f2f2f2; /* Fond gris clair pour les lignes paires */
+        }
+
+        /* Style pour le survol des lignes */
+        tr:hover {
+            background-color: #ddd; /* Fond plus sombre au survol */
+        }
+
+        /* Style de la première ligne (en-tête du tableau) */
+        thead {
+            border-bottom: 2px solid #113596; /* Bordure en bas de l'en-tête */
+        }
+
+        /* Style de la dernière ligne du tableau */
+        tfoot {
+            background-color: #113596; /* Fond vert */
+            color: white; /* Texte en blanc */
+            font-weight: bold;
+        }
+
+        /* Style des cellules du pied de tableau */
+        tfoot td {
+            padding: 12px 15px;
+            text-align: center; /* Alignement du texte au centre */
+        }
+
+
+        /* Conteneur principal du formulaire */
+form {
+    width: 100%;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Disposition en grille pour les champs de formulaire */
+form .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+form .row > div {
+    flex: 1 1 calc(25% - 15px); /* 4 éléments par ligne */
+    box-sizing: border-box;
+}
+
+label {
+    font-size: 14px;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="text"], input[type="number"], select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type="submit"] {
+    background-color: #113596;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+input[type="submit"]:hover {
+    background-color:  #0e355a;
+}
+
